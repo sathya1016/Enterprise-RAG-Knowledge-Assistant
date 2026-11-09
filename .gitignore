@@ -243,3 +243,12 @@ venv/
 # Test and coverage
 .coverage
 htmlcov/
+
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+
+data/chroma/
+*.log

@@ -4,3 +4,10 @@ pydantic-settings
 python-dotenv
 pytest
 httpx
+pymupdf
+python-multipart
+langchain-text-splitters
+langchain-openai
+langchain-chroma
+chromadb
+openai
