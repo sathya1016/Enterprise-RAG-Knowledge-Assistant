@@ -555,3 +555,52 @@ The following systematic approach was used throughout debugging.
 | Stage 8 | Production readiness and deployment | Pending |
 
 **Note:** This log records the errors and fixes confirmed during development. No additional failures are assumed where the available logs did not establish them.
+
+
+## Stage 4 – Retrieval Performance Investigation
+
+### Problem
+The semantic retrieval API initially took approximately 43–45 seconds to process a query.
+
+### Investigation and debugging steps
+
+1. Added timing measurements to identify the slow component.
+2. Separated embedding API execution time from ChromaDB search time.
+3. Tested OpenRouter embeddings using the direct OpenAI SDK.
+4. Tested embeddings independently using LangChain.
+5. Verified that RetrievalService and VectorStore instances were reused across API requests.
+6. Inspected HTTP client configuration, timeout and retry settings.
+7. Compared standalone embedding execution with embedding execution through FastAPI.
+8. Verified Python executable, process ID, embedding model and API base URL.
+
+### Code changes
+
+**File: backend/app/api/retrieval.py**
+- Moved RetrievalService initialization outside the endpoint.
+- Reused the same service instance across requests.
+
+**File: backend/app/rag/vector_store.py**
+- Added explicit embedding request timeout of 15 seconds.
+- Configured maximum retries to 1.
+- Separated query embedding generation from ChromaDB search.
+- Added individual performance measurements for embedding generation and vector search.
+
+### Performance results
+
+| Measurement | Earlier result | Latest result |
+|---|---:|---:|
+| Embedding generation | ~43 seconds | 0.572–1.174 seconds |
+| ChromaDB search | 0.007–0.285 seconds | 0.003–0.086 seconds |
+| Total retrieval | ~43–45 seconds | 0.576–1.260 seconds |
+
+### Outcome
+The latest FastAPI tests completed retrieval in approximately 1 second.
+
+The original delay was intermittent. Its exact root cause was not conclusively established.
+
+### Technical learning
+- Profile individual components before optimizing.
+- Separate remote API latency from local vector database latency.
+- Reuse service and client instances.
+- Measure performance inside the actual application execution path.
+- Avoid assuming that a successful HTTP response means the request was fast.

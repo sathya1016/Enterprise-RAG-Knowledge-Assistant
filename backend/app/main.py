@@ -1,7 +1,14 @@
 from fastapi import FastAPI
 
 from app.api.documents import router as documents_router
+from app.api.retrieval import router as retrieval_router
+import logging
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    force=True,
+)
 app = FastAPI(
     title="Enterprise RAG Knowledge Assistant",
     description="Enterprise document-based AI knowledge assistant",
@@ -38,3 +45,5 @@ async def application_info():
 
 
 app.include_router(documents_router)
+
+app.include_router(retrieval_router)
