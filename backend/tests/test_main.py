@@ -22,4 +22,4 @@ def test_application_info():
     response = client.get("/api/v1/info")
 
     assert response.status_code == 200
-    assert response.json()["version"] == "0.1.0"
+    assert response.json()["version"] == "0.2.0"

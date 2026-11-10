@@ -15,7 +15,8 @@ class Settings(BaseSettings):
     CHROMA_COLLECTION_NAME: str = "enterprise_documents"
 
     MAX_UPLOAD_SIZE_MB: int = 10
-
+    CHAT_MODEL: str = "openai/gpt-4o-mini"
+    RETRIEVAL_DISTANCE_THRESHOLD: float = 1.5
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

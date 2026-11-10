@@ -8,8 +8,8 @@ from app.schemas.retrieval import (
     RetrievalRequest,
     RetrievalResponse,
 )
-from app.services.retrieval import RetrievalService
-retrieval_service = RetrievalService()
+from app.services.retrieval import retrieval_service
+
 import time
 logger = logging.getLogger(__name__)
 
